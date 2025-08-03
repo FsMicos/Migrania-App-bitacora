@@ -1,0 +1,74 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install behave coverage pytest-cov
+      
+      - name: Run tests and generate coverage
+        run: |
+          cd backend
+          echo "========== Setting Django Environment =========="
+          set DJANGO_SETTINGS_MODULE=migraine_app.settings
+          echo "Django settings module: %DJANGO_SETTINGS_MODULE%"
+          
+          echo "========== Clearing Previous Coverage =========="
+          coverage erase
+          
+          echo "========== Running Behave Tests with Coverage =========="
+          coverage run --source=. -m behave evaluacion_diagnostico/features --no-color --format=plain
+          
+          echo "========== Coverage Report =========="
+          coverage report --show-missing
+          
+          echo "========== Generating XML Coverage Report =========="
+          coverage xml -o coverage.xml
+          
+          echo "========== Coverage Generation Complete =========="
+        
+      - name: Verify coverage file and show details
+        run: |
+          cd backend
+          if (Test-Path "coverage.xml") {
+            Write-Host "✅ Coverage file generated successfully at: $(Get-Location)\coverage.xml"
+            $fileSize = (Get-Item "coverage.xml").Length
+            Write-Host "📊 Coverage file size: $fileSize bytes"
+            Write-Host ""
+            Write-Host "📋 First 20 lines of coverage.xml:"
+            Get-Content "coverage.xml" | Select-Object -First 20
+            Write-Host ""
+            Write-Host "📋 Coverage summary:"
+            C:/Users/runneradmin/AppData/Local/Programs/Python/Python311/python.exe -m coverage report
+          } else {
+            Write-Host "❌ Coverage file not found!"
+            Write-Host "📁 Current directory contents:"
+            Get-ChildItem -Force
+            exit 1
+          }
+      
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
