@@ -59,7 +59,7 @@ jobs:
             Get-Content "coverage.xml" | Select-Object -First 20
             Write-Host ""
             Write-Host "📋 Coverage summary:"
-            C:/Users/runneradmin/AppData/Local/Programs/Python/Python311/python.exe -m coverage report
+            python -m coverage report
           } else {
             Write-Host "❌ Coverage file not found!"
             Write-Host "📁 Current directory contents:"
