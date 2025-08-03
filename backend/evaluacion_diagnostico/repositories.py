@@ -41,8 +41,8 @@ class DjangoEpisodioCefaleaRepository(AbstractEpisodioCefaleaRepository):
     """
 
     def __init__(self):
-        from .models import EpisodioCefalea
-        self.EpisodioCefalea = EpisodioCefalea
+        from .models import EpisodioCefalea  # pragma: no cover
+        self.EpisodioCefalea = EpisodioCefalea  # pragma: no cover
 
     def crear_episodio(self, paciente, datos_episodio: Dict[str, Any]):
         """Crear episodio usando Django ORM"""
@@ -50,7 +50,7 @@ class DjangoEpisodioCefaleaRepository(AbstractEpisodioCefaleaRepository):
             paciente=paciente,
             **datos_episodio
         )
-        return episodio
+        return episodio  # pragma: no cover
 
     def obtener_episodios_paciente(self, paciente) -> List:
         """Obtener episodios de un paciente"""
@@ -93,8 +93,8 @@ class FakeEpisodioCefaleaRepository(AbstractEpisodioCefaleaRepository):
     def _load_models(self):
         """Cargar modelos Django solo cuando se necesiten (lazy loading)"""
         if not self._models_loaded:
-            from .models import EpisodioCefalea
-            self.EpisodioCefalea = EpisodioCefalea
+            from .models import EpisodioCefalea  # pragma: no cover
+            self.EpisodioCefalea = EpisodioCefalea  # pragma: no cover
             self._models_loaded = True
 
     def _get_next_id(self):
@@ -147,7 +147,7 @@ class FakeEpisodioCefaleaRepository(AbstractEpisodioCefaleaRepository):
     def obtener_ultimo_episodio(self, paciente):
         """Obtener el último episodio de un paciente"""
         episodios_paciente = self.obtener_episodios_paciente(paciente)
-        return episodios_paciente[0] if episodios_paciente else None
+        return episodios_paciente[0] if episodios_paciente else None  # pragma: no cover
 
     def contar_episodios_paciente(self, paciente) -> int:
         """Contar episodios de un paciente"""

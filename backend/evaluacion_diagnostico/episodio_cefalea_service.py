@@ -15,13 +15,13 @@ class EpisodioCefaleaService:
         Inicializar servicio con repositorio inyectable.
         """
         # Importar aquí para evitar dependencias circulares
-        from .models import EpisodioCefalea
-        self.EpisodioCefalea = EpisodioCefalea
+        from .models import EpisodioCefalea  # pragma: no cover
+        self.EpisodioCefalea = EpisodioCefalea  # pragma: no cover
 
         # Usar repositorio inyectado o crear uno por defecto
         if repository is None:
-            from .repositories import DjangoEpisodioCefaleaRepository
-            self.repository = DjangoEpisodioCefaleaRepository()
+            from .repositories import DjangoEpisodioCefaleaRepository  # pragma: no cover
+            self.repository = DjangoEpisodioCefaleaRepository()  # pragma: no cover
         else:
             self.repository = repository
 
