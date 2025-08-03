@@ -36,14 +36,14 @@ jobs:
           echo "========== Clearing Previous Coverage =========="
           coverage erase
           
-          echo "========== Running Behave Tests with Coverage =========="
-          coverage run --source=. -m behave evaluacion_diagnostico/features --no-color --format=plain
+          echo "========== Running Behave Tests with Coverage (using .coveragerc) =========="
+          coverage run -m behave evaluacion_diagnostico/features --no-color --format=plain
           
-          echo "========== Coverage Report =========="
+          echo "========== Coverage Report with Exclusions =========="
           coverage report --show-missing
           
           echo "========== Generating XML Coverage Report =========="
-          coverage xml -o coverage.xml
+          coverage xml
           
           echo "========== Coverage Generation Complete =========="
         

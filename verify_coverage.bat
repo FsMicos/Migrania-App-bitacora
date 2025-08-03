@@ -16,7 +16,7 @@ python -m coverage erase
 
 echo.
 echo 3. Ejecutando tests con coverage...
-python -m coverage run --source=. -m behave evaluacion_diagnostico/features --no-color --format=plain
+python -m coverage run -m behave evaluacion_diagnostico/features --no-color --format=plain
 
 echo.
 echo 4. Generando reporte de coverage...
@@ -24,7 +24,7 @@ python -m coverage report --show-missing
 
 echo.
 echo 5. Generando archivo XML para SonarQube...
-python -m coverage xml -o coverage.xml
+python -m coverage xml
 
 echo.
 echo 6. Verificando archivo de coverage...
